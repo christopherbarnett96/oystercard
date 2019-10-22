@@ -2,6 +2,9 @@ require 'oystercard'
 
 describe Oystercard do
   let(:station){ double :station }
+  let(:station2){ double :station }
+  let(:station3){ double :station }
+  let(:station4){ double :station }
   context 'Card balance' do
     it 'has a zero balance when created' do
       expect(subject.balance).to eq 0.00
@@ -38,12 +41,12 @@ describe Oystercard do
     it 'User can touch out' do
       subject.add_value(1)
       subject.touch_in(station)
-      subject.touch_out
+      subject.touch_out(station2)
       expect(subject).to_not be_in_journey
     end
 
     it 'Deducts balance by £1 when touched out' do
-      expect{ subject.touch_out }.to change{ subject.balance }.by(-1.00)
+      expect{ subject.touch_out(station2) }.to change{ subject.balance }.by(-1.00)
     end
 
 
@@ -60,6 +63,22 @@ describe Oystercard do
       subject.touch_in(station)
       expect(subject.entry_station).to eq station
     end
+
+  end
+
+  context 'Journey' do
+
+    it 'Is empty as default' do
+      expect(subject.journeys).to eq []
+    end
+
+    it 'Records entry and exit station' do
+      subject.add_value(5)
+      subject.touch_in(station)
+      subject.touch_out(station2)
+      expect(subject.journeys).to include(entry: station, exit: station2)
+    end
+
   end
 
 
