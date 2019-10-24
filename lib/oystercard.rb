@@ -1,13 +1,16 @@
+require_relative 'journey'
+require_relative 'station'
+
 class Oystercard
   DEFAULT_MAX_BALANCE = 90
   DEFAULT_MIN_BALANCE = 1
 
-  attr_reader :balance, :entry_station, :journeys
-
-  def initialize
-    @entry_station = nil
+  attr_reader :balance, :journeys, :journey
+  attr_accessor :entry_station
+  def initialize(journey)
     @balance = 0.00
     @journeys = []
+    @journey = journey
   end
 
   def add_value(value)
@@ -16,20 +19,20 @@ class Oystercard
   end
 
 
+
+
   def touch_in(station)
     raise "Balance too low" if min_balance?
-    @entry_station = station
+    journey.entry_station = station
   end
 
   def touch_out(exit_station)
-    @journeys << {entry: @entry_station, exit: exit_station}
+    @journeys << {entry: journey.entry_station, exit: exit_station}
     deduct(DEFAULT_MIN_BALANCE)
-    @entry_station = nil
+    journey.entry_station = nil
   end
 
-  def in_journey?
-    !!entry_station
-  end
+
 
 
   private

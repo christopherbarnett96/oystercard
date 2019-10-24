@@ -6,6 +6,8 @@ describe Oystercard do
   let(:station3){ double :station }
   let(:station4){ double :station }
   context 'Card balance' do
+
+    subject(:oystercard) {described_class.new(journey = Journey.new)}
     it 'has a zero balance when created' do
       expect(subject.balance).to eq 0.00
     end
@@ -26,7 +28,7 @@ describe Oystercard do
   end
 
   context 'Journey flag' do
-
+  subject(:oystercard) {described_class.new(journey = Journey.new)}
 
     it 'Does not allow travel without minimum balance requirement' do
       expect{ subject.touch_in(station) }.to raise_error "Balance too low"
@@ -35,14 +37,14 @@ describe Oystercard do
     it 'Sets journey flag when touched in' do
       subject.add_value(1)
       subject.touch_in(station)
-      expect(subject).to be_in_journey
+      expect(subject.journey).to be_in_journey
     end
 
     it 'User can touch out' do
       subject.add_value(1)
       subject.touch_in(station)
       subject.touch_out(station2)
-      expect(subject).to_not be_in_journey
+      expect(subject.journey).to_not be_in_journey
     end
 
     it 'Deducts balance by £1 when touched out' do
@@ -53,6 +55,7 @@ describe Oystercard do
   end
 
   context 'Station name' do
+    subject(:oystercard) {described_class.new(journey = Journey.new)}
 
     it 'Has a default value of nil' do
       expect(subject.entry_station).to eq nil
@@ -61,12 +64,13 @@ describe Oystercard do
     it 'Remembers which station it started at' do
       subject.add_value(5)
       subject.touch_in(station)
-      expect(subject.entry_station).to eq station
+      expect(subject.journey.entry_station).to eq station
     end
 
   end
 
   context 'Journey' do
+    subject(:oystercard) {described_class.new(journey = Journey.new)}
 
     it 'Is empty as default' do
       expect(subject.journeys).to eq []
