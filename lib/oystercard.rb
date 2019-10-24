@@ -6,20 +6,17 @@ class Oystercard
   DEFAULT_MIN_BALANCE = 1
 
   attr_reader :balance, :journeys, :journey
-  attr_accessor :entry_station
-  def initialize(journey)
+
+  def initialize(journey = Journey.new)
     @balance = 0.00
     @journeys = []
     @journey = journey
   end
 
   def add_value(value)
-    raise "Sorry you tried to add £#{sprintf "%.2f", value} the maximum you can add to this card currently is £#{sprintf "%.2f", max_value}" unless value < max_value
+    raise "Sorry you tried to add £#{sprintf "%.2f", value} the maximum you can add to this card currently is £#{sprintf "%.2f", max_value}" unless value <= max_value
     @balance += value
   end
-
-
-
 
   def touch_in(station)
     raise "Balance too low" if min_balance?

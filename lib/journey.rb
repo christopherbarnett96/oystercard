@@ -13,19 +13,11 @@ class Journey
   end
 
   def complete?
-    if !!entry_station && !! exit_station
-      true
-    else
-      false
-    end
+    !!entry_station && !!exit_station ? true : false
   end
 
   def fare
-    if complete?
-      FARE
-    else
-      PENALTY_FARE
-    end
+    complete? ? FARE : PENALTY_FARE
   end
 
   def finish(station)

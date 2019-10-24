@@ -58,7 +58,7 @@ describe Oystercard do
     subject(:oystercard) {described_class.new(journey = Journey.new)}
 
     it 'Has a default value of nil' do
-      expect(subject.entry_station).to eq nil
+      expect(subject.journey.entry_station).to eq nil
     end
 
     it 'Remembers which station it started at' do
